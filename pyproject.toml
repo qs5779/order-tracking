@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "fat"
+version = "0.1.0-dev0"
+description = "Template for fastapi apps"
+authors = ["Quien Sabe <qs5779@mail.com>"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.111.0"
+pydantic = "^2.7.1"
+sqlalchemy = "^2.0.30"
+uvicorn = "^0.29.0"
+pydantic-settings = "^2.2.1"
+loguru = "^0.7.2"
+jinja2 = "^3.1.4"
+python-multipart = "^0.0.9"
+num2words = "^0.5.13"
+
+[tool.poetry.group.test]
+optional = false
+
+[tool.poetry.group.test.dependencies]
+isort = "^5.13.2"
+black = "^24.4.2"
+flake8 = "^7.0.0"
+wemake-python-styleguide = "^0.19.2"
+mypy = "^1.10.0"
+types-python-dateutil = "^2.9.0.20240316"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

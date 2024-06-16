@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="generator" content= "HTML Tidy for HTML5 for Linux version 5.6.0">
+    <meta charset="UTF-8">
+    <title>
+      {% if order.id %}
+        Edit Order
+      {% else %}
+        Add Order
+      {% endif %}
+    </title>
+    <link href="{{ url_for('static', path='/forms.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="child">
+{% if order.id %}
+        <h2>Edit Order ID {{ order.id }}</h2>
+{% else %}
+        <h2>Add Order</h2>
+{% endif %}
+        <table>
+          <form method="post", action="/forms/upsert">
+            <tr>
+              <td><label for="number">Number</label></td>
+              <td><input type="text" id="number" name="number" value="{{ order.number or '' }}" /></td>
+            </tr>
+            <tr>
+              <td><label for="ordered">Ordered</label></td>
+              <td><input type="text" id="ordered" name="ordered" value="{{ order.ordered or '' }}" /></td>
+            </tr>
+            <tr>
+              <td><label for="shipped">Shipped</label></td>
+              <td><input type="text" id="shipped" name="shipped" value="{{ order.shipped or '' }}" /></td>
+            </tr>
+            <tr>
+              <td><label for="arrived">Arrived</label></td>
+              <td><input type="text" id="arrived" name="arrived" value="{{ order.arrived or '' }}" /></td>
+            </tr>
+            <tr>
+              <td><label for="delivered">Delivered</label></td>
+              <td><input type="text" id="delivered" name="delivered" value="{{ order.delivered or '' }}" /></td>
+            </tr>
+              <td><label for="trn">Tracking #</label></td>
+              <td><input type="text" id="trn" name="trn" value="{{ order.trn or '' }}" /></td>
+            </tr>
+              <td><label for="trl">Tracking Link</label></td>
+              <td><input type="text" id="trl" name="trl" value="{{ order.trl or '' }}" /></td>
+            </tr>
+              <td><label for="vendor">Vendor</label></td>
+              <td><input type="text" id="vendor" name="vendor" value="{{ order.vendor or '' }}" /></td>
+            </tr>
+              <td><label for="shipper">Shipper</label></td>
+              <td><input type="text" id="shipper" name="shipper" value="{{ order.shipper or '' }}" /></td>
+            </tr>
+            </tr>
+              <td><label for="notes">Notes</label></td>
+              <td><input type="text" id="notes" name="notes" value="{{ order.notes or '' }}" /></td>
+            </tr>
+            <tr><td></td></tr>
+            <tr>
+              <td colspan="2" align="center">
+{% if order.id %}
+                <input type="submit" value="Update">
+{% else %}
+                <input type="submit" value="Add">
+{% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <input type="hidden" id="oid" name="oid" value="{{ order.id }} or 0">
+              </td>
+            </tr>
+          </form>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

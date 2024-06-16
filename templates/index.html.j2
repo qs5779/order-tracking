@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.6.0">
+    <meta charset="UTF-8">
+    <title>
+      Wtf Order Tracking System
+    </title>
+    <link href="{{ url_for('static', path='/index.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="child">
+        <p>
+          <a title="Show Pending Orders" href="{{ pending_url }}">Show Pending Orders</a>
+        </p>
+        <p>
+          <a title="Show All Orders" href="{{ orders_url }}">Show All Orders</a>
+        </p>
+        <p>
+          <a title="Add Order" href="{{ add_order_url }}">Add Order</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
