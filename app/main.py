@@ -46,6 +46,12 @@ async def favicon() -> FileResponse:
     return FileResponse("static/favicon.ico")
 
 
+@app.get("/health", response_class=HTMLResponse)
+async def health_check() -> str:
+    """Serve health check response."""
+    return "Healthy version: {0}".format(cfg.version)
+
+
 if __name__ == "__main__":
     import uvicorn  # noqa: WPS433
 

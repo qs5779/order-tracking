@@ -14,7 +14,7 @@ from starlette.responses import RedirectResponse
 
 from app.config.database import get_db
 from app.models import Order
-from app.routes.order.controller import order_add_or_update
+from app.routes.shared import order_add_or_update
 from app.schemas.order import OrderCreate
 
 templates = Jinja2Templates(directory="templates/")
@@ -51,7 +51,7 @@ def order_get(
     if order_id:
         order = db.query(Order).filter(Order.id == order_id).first()
     else:
-        order = Order()
+        order = Order(id=0)
     return templates.TemplateResponse(
         "order.html.j2",
         context={

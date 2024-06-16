@@ -19,7 +19,7 @@ update:
 	# poetry export -f requirements.txt --only=test --only=docs -o requirements_dev.txt --without-hashes
 	poetry update --with test
 	poetry export -f requirements.txt --without=test -o requirements.txt --without-hashes
-	poetry export -f requirements.txt --only=test -o requirements_dev.txt --without-hashes
+	# poetry export -f requirements.txt --only=test -o requirements_dev.txt --without-hashes
 
 .PHONY: black
 black:
