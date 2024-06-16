@@ -1,0 +1,14 @@
+{
+    "python.testing.pytestArgs": [
+        "--override-ini",
+        "addopts=--verbose -vv tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "cSpell.words": [
+        "autoflush",
+        "rcvd",
+        "upserted"
+    ],
+    "linthtml.configFile": ""
+}

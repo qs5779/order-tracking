@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.6.0">
+    <meta charset="UTF-8">
+    <title>
+      {{ title }}
+    </title>
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container"><div class="child">
+    <table>
+      <tr>
+        <th>
+          id
+        </th>
+        <th>
+          description
+        </th>
+        <th>
+          quantity
+        </th>
+        <th>
+          order id
+        </th>
+      </tr>
+{% for piece in pieces %}
+      <tr>
+        <td>
+          {{ piece.id }}
+        </td>
+        <td>
+          {{ piece.desc }}
+        </td>
+        <td>
+          {{ piece.qty }}
+        </td>
+        <td>
+          {{ piece.order_id }}
+        </td>
+      </tr>
+{% endfor %}
+    </table>
+    <p>
+      <a title="Show Pending Orders" href="{{ pending_url }}">Show Pending Orders</a>
+    </p>
+    <p>
+      <a title="Show All Orders" href="{{ orders_url }}">Show All Orders</a>
+    </p>
+    <p>
+      <a title="Mark Items Received" href="{{ rcvd_url }}">Mark Items Received</a>
+    </p>
+    </div></div>
+  </body>
+</html>
