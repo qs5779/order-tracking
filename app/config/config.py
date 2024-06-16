@@ -5,7 +5,7 @@ from typing import Optional
 
 from fastapi.templating import Jinja2Templates
 from loguru import logger
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 
 from app.constants import VERSION
@@ -13,8 +13,6 @@ from app.constants import VERSION
 
 class AppConfig(BaseModel):
     """Application configurations."""
-
-    model_config = ConfigDict(extra="ignore")
 
     var_a: int = 33
     var_b: float = 22.0
@@ -40,6 +38,7 @@ class GlobalConfig(BaseSettings):
         """Loads the dotenv file."""
 
         env_file: str = ".env"
+        extra: str = "ignore"
 
 
 class DevConfig(GlobalConfig):
