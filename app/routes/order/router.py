@@ -18,8 +18,8 @@ from app.routes.order.controller import (
     get_items_dict,
     get_orders_dict,
     get_pieces,
-    order_add_or_update,
 )
+from app.routes.shared import order_add_or_update
 from app.schemas.order import OrderCreate, OrderResponse
 from app.schemas.piece import PieceResponse
 

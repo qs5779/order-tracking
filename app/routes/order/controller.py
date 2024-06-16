@@ -13,9 +13,8 @@ from app.constants import UNKNOWN
 from app.foos import morph_pydantic
 from app.models import Order, Piece, Shipper, Vendor
 from app.routes.forms.router import router as forms_router
-from app.routes.shipper.controller import get_shipper_id_by_name, get_shippers_dict
-from app.routes.vendor.controller import get_vendor_id_by_name, get_vendors_dict
-from app.schemas.order import OrderCreate
+from app.routes.shipper.controller import get_shippers_dict
+from app.routes.vendor.controller import get_vendors_dict
 from app.schemas.piece import PieceCreate, PieceResponse
 
 Q_USPS = "https://tools.usps.com/go/TrackConfirmAction_input?strOrigTrackNum="
@@ -309,49 +308,3 @@ def get_items_dict(oid: int, db: Session) -> list[dict[str, str]]:
 
     logger.debug("Pieces: {0}".format(res))
     return res
-
-
-def order_add_or_update(order: OrderCreate, db: Session) -> Order:  # noqa: C901, WPS231
-    """Update or insert an order.
-
-    Parameters
-    ----------
-    order : OrderCreate
-        The order create object
-    db : Session
-        The database connection
-
-    Returns
-    -------
-    Order
-        The resulting record object
-    """
-    record = db.query(Order).filter(Order.number == order.number).first()
-
-    # if not, create it
-    if record is None:
-        record = Order()
-
-    if not order.shipper:
-        order.shipper = UNKNOWN
-    if not order.vendor:
-        order.vendor = UNKNOWN
-
-    # sync the data
-    m_data = order.model_dump(exclude_unset=True).items()
-    for key, vv in m_data:
-        if key == "vendor":
-            setattr(record, "vendor_id", get_vendor_id_by_name(vv, db))  # noqa: B010
-        elif key == "shipper":
-            setattr(record, "shipper_id", get_shipper_id_by_name(vv, db))  # noqa: B010
-        elif key == "pieces":
-            continue
-        else:
-            setattr(record, key, vv)
-
-    # persist the data to the database
-    db.add(record)
-    db.commit()
-    db.refresh(record)
-
-    return record

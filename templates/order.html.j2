@@ -19,6 +19,7 @@
         <h2>Edit Order ID {{ order.id }}</h2>
 {% else %}
         <h2>Add Order</h2>
+        <h2>Order ID {{ order.id }}</h2>
 {% endif %}
         <table>
           <form method="post", action="/forms/upsert">
@@ -70,7 +71,7 @@
             </tr>
             <tr>
               <td colspan="2">
-                <input type="hidden" id="oid" name="oid" value="{{ order.id }} or 0">
+                <input type="hidden" id="oid" name="oid" value="{{ order.id }}">
               </td>
             </tr>
           </form>
