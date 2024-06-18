@@ -8,14 +8,14 @@ from dateutil.parser import parse as parse_date
 from fastapi import APIRouter, Depends, Form, Request, Response, status
 from fastapi.templating import Jinja2Templates
 from loguru import logger
-from num2words import num2words as spell_number
 from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse
 
 from app.config.database import get_db
-from app.models import Order
-from app.routes.shared import order_add_or_update
+from app.models import Order, Piece
+from app.routes.shared import order_add_or_update, piece_add_or_update
 from app.schemas.order import OrderCreate
+from app.schemas.piece import PieceResponse
 
 templates = Jinja2Templates(directory="templates/")
 
@@ -156,45 +156,121 @@ def order_upsert(  # noqa: WPS211
     )
 
 
-@router.get("/test")
-def form_get(request: Request) -> Response:
-    """Form get route.
+@router.get("/piece_edit/{piece_id}")
+def piece_edit(
+    request: Request,
+    piece_id: int,
+    db: Session = Depends(get_db),
+) -> Response:
+    """Form for piece get route.
 
     Parameters
     ----------
     request : Request
         Request object
+    piece_id : int
+        The piece identifier
+    db : Session
+        The database session
+
+    Raises
+    ------
+    ValueError
+        if piece_id is less than 1
 
     Returns
     -------
     Response
         Response object
     """
-    res = "Type a number"
+    if piece_id < 1:
+        raise ValueError("Invalid piece id: {0}. Must be between >= 1.")
+
+    piece = db.query(Piece).filter(Piece.id == piece_id).first()
+
     return templates.TemplateResponse(
-        "form.html",
-        context={"request": request, "result": res},
+        "piece.html.j2",
+        context={
+            "request": request,
+            "piece": piece,
+            "action_url": router.url_path_for("piece_upsert"),
+        },
     )
 
 
-@router.post("/test")
-def form_post(request: Request, num: int = Form(...)) -> Response:
-    """Form get route.
+@router.get("/piece_add/{order_id}")
+def piece_add(
+    request: Request,
+    order_id: int,
+    db: Session = Depends(get_db),
+) -> Response:
+    """Form for piece get route.
 
     Parameters
     ----------
     request : Request
         Request object
-    num: int
-        Form data
+    order_id : int
+        The order identifier
+    db : Session
+        The database session
 
     Returns
     -------
     Response
         Response object
     """
-    res = spell_number(num)
+    piece = Piece(id=0, order_id=order_id)
+
     return templates.TemplateResponse(
-        "form.html",
-        context={"request": request, "result": res},
+        "piece.html.j2",
+        context={
+            "request": request,
+            "piece": piece,
+            "action_url": router.url_path_for("piece_upsert"),
+        },
+    )
+
+
+@router.post("/piece_upsert")
+def piece_upsert(  # noqa: WPS211
+    pid: Annotated[int, Form()],
+    desc: Annotated[str, Form()],
+    qty: Annotated[int, Form()],
+    order_id: Annotated[int, Form()],
+    db: Session = Depends(get_db),
+) -> RedirectResponse:
+    """Update or add a piece from form data.
+
+    Parameters
+    ----------
+    pid : Annotated[int, Form()]
+        The piece id
+    desc : Annotated[str, Form()]
+        The piece description
+    qty : Annotated[int, Form()]
+        The piece quantity
+    order_id : Annotated[int, Form()]
+        The order id
+    db : Session
+        The database session, by default Depends(get_db)
+
+    Returns
+    -------
+    RedirectResponse
+        The RedirectResponse object
+    """
+    piece = PieceResponse(id=pid, desc=desc, qty=qty, order_id=order_id)
+
+    record = piece_add_or_update(piece, db)
+    if pid:
+        action = "Updated"
+    else:
+        action = "Added"
+
+    logger.debug("{0} order id: {1}".format(action, record.id))
+
+    return RedirectResponse(
+        url="/orders/pending",
+        status_code=status.HTTP_303_SEE_OTHER,
     )

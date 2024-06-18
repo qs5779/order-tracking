@@ -6,9 +6,7 @@ from typing import Optional
 from fastapi.templating import Jinja2Templates
 from loguru import logger
 from pydantic import BaseModel, Field
-from pydantic_settings import BaseSettings
-
-from app.constants import VERSION
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppConfig(BaseModel):
@@ -32,31 +30,16 @@ class GlobalConfig(BaseSettings):
     # environment specific variables do not need the Field class
     database_url: str
     log_level: str = "DEBUG"
-    version: str = VERSION
 
-    class Config:
-        """Loads the dotenv file."""
-
-        env_file: str = ".env"
-        extra: str = "ignore"
+    model_config = SettingsConfigDict(extra="ignore", env_file=".env")
 
 
 class DevConfig(GlobalConfig):
     """Development configurations."""
 
-    class Config:
-        """Config class for development."""
-
-        env_prefix: str = "DEV_"
-
 
 class ProdConfig(GlobalConfig):
     """Production configurations."""
-
-    class Config:
-        """Config class for production."""
-
-        env_prefix: str = "PROD_"
 
 
 class FactoryConfig:
@@ -75,9 +58,9 @@ class FactoryConfig:
     def __call__(self) -> GlobalConfig:
         """Return the appropriate config based on environment."""
         if self.env_state == "prod":
-            return ProdConfig()  # type: ignore [call-arg]
+            return ProdConfig(env_prefix="PROD_")  # type: ignore [call-arg]
 
-        return DevConfig()  # type: ignore [call-arg]
+        return DevConfig(env_prefix="DEV_")  # type: ignore [call-arg]
 
 
 def _initialize_logging() -> None:

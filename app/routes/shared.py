@@ -3,10 +3,12 @@
 from sqlalchemy.orm import Session
 
 from app.constants import UNKNOWN
-from app.models import Order
+from app.foos import OrderTrackingError
+from app.models import Order, Piece
 from app.routes.shipper.controller import get_shipper_id_by_name
 from app.routes.vendor.controller import get_vendor_id_by_name
 from app.schemas.order import OrderCreate
+from app.schemas.piece import PieceResponse
 
 
 def order_add_or_update(order: OrderCreate, db: Session) -> Order:  # noqa: C901, WPS231
@@ -48,6 +50,52 @@ def order_add_or_update(order: OrderCreate, db: Session) -> Order:  # noqa: C901
             continue
         else:
             setattr(record, key, vv)
+
+    # persist the data to the database
+    db.add(record)
+    db.commit()
+    db.refresh(record)
+
+    return record
+
+
+def piece_add_or_update(piece: PieceResponse, db: Session) -> Piece:
+    """Update or insert an piece.
+
+    Parameters
+    ----------
+    piece : PieceResponse
+        The piece response object
+    db : Session
+        The database connection
+
+    Raises
+    ------
+    OrderTrackingError
+        if piece.id and piece.id not in db
+
+    Returns
+    -------
+    Piece
+        The resulting record object
+    """
+    if piece.id:
+        record = db.query(Piece).filter(Piece.id == piece.id).first()  # noqa: WPS221
+        if record is None:
+            raise OrderTrackingError(
+                "Piece id: {0} not found in database".format(piece.id),
+            )
+        editing = True
+    else:
+        record = Piece()
+        editing = False
+
+    # sync the data
+    m_data = piece.model_dump(exclude_unset=True).items()
+    for key, vv in m_data:
+        if key == "id" and not editing:
+            continue
+        setattr(record, key, vv)
 
     # persist the data to the database
     db.add(record)

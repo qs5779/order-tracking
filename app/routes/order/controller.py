@@ -139,7 +139,7 @@ def _pieces_url(router: APIRouter, oid: int, db: Session) -> str:
     pieces_nbr = db.query(func.count(Piece.id)).filter(Piece.order_id == oid).scalar()
     if pieces_nbr > 0:
         return _oid_url_for(router, oid, "items")
-    return ""
+    return forms_router.url_path_for("piece_add", order_id=oid)
 
 
 def get_orders(db: Session, pending: bool = False) -> list[Order]:
@@ -301,6 +301,7 @@ def get_items_dict(oid: int, db: Session) -> list[dict[str, str]]:
     for piece in pieces:
         pd: dict[str, str] = {}
         pd["id"] = str(piece.id)
+        pd["pil"] = forms_router.url_path_for("piece_edit", piece_id=piece.id)
         pd["desc"] = piece.desc
         pd["qty"] = str(piece.qty)
         pd["order_id"] = str(piece.order_id)

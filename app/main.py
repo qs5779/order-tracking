@@ -8,6 +8,7 @@ from starlette.responses import FileResponse
 
 from app.config.config import cfg, templates
 from app.config.database import engine
+from app.constants import VERSION
 from app.models import create_all_tables
 from app.routes.forms.router import router as form_routes
 from app.routes.order.router import router as order_routes
@@ -49,7 +50,7 @@ async def favicon() -> FileResponse:
 @app.get("/health", response_class=HTMLResponse)
 async def health_check() -> str:
     """Serve health check response."""
-    return "Healthy version: {0}".format(cfg.version)
+    return "Healthy version: {0}".format(VERSION)
 
 
 if __name__ == "__main__":

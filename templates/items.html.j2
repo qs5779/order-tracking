@@ -28,7 +28,7 @@
 {% for piece in pieces %}
       <tr>
         <td>
-          {{ piece.id }}
+          <a href='{{ piece.pil }}' title='{{ piece.id }}'>{{ piece.id }}</a>
         </td>
         <td>
           {{ piece.desc }}

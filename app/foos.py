@@ -15,3 +15,7 @@ def morph_pydantic(db_object: Base, pydantic_model: Type[T]) -> T:
     # if "_sa_instance_state" in do:
     #     do.pop("_sa_instance_state")
     return pydantic_model(**db_object.__dict__)
+
+
+class OrderTrackingError(Exception):
+    """Order tracking exception class."""
