@@ -10,6 +10,5 @@
         "rcvd",
         "upserted"
     ],
-    "linthtml.configFile": "",
-    "ansible.python.interpreterPath": "/bin/python"
+    "linthtml.configFile": ".linthtmlrc.yaml",
 }

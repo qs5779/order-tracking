@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="generator" content= "HTML Tidy for HTML5 for Linux version 5.6.0">
+    <meta charset="UTF-8">
+    <title>
+      {% if piece.id %}
+        Edit Order
+      {% else %}
+        Add Order
+      {% endif %}
+    </title>
+    <link href="{{ url_for('static', path='/forms.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="child">
+{% if piece.id %}
+        <h2>Edit Item ID {{ piece.id }}</h2>
+{% else %}
+        <h2>Add Item</h2>
+{% endif %}
+        <table>
+          <form method="post", action="/forms/piece_upsert">
+            <tr>
+              <td><label for="desc">Description</label></td>
+              <td><input type="text" id="desc" name="desc" value="{{ piece.desc or '' }}" size="100" /></td>
+            </tr>
+            <tr>
+              <td><label for="qty">Quantity</label></td>
+              <td><input type="text" id="qty" name="qty" value="{{ piece.qty or '1' }}" /></td>
+            </tr>
+            <tr>
+              <td><label for="order_id">Order ID</label></td>
+              <td><input type="text" id="order_id" name="order_id" value="{{ piece.order_id or '0' }} disabled" /></td>
+            </tr>
+            <tr><td></td></tr>
+            <tr>
+              <td colspan="2" align="center">
+{% if piece.id %}
+                <input type="submit" value="Update">
+{% else %}
+                <input type="submit" value="Add">
+{% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <input type="hidden" id="pid" name="pid" value="{{ piece.id }}">
+              </td>
+            </tr>
+          </form>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

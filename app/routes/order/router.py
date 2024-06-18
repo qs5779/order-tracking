@@ -9,8 +9,9 @@ from loguru import logger
 from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse, Response
 
-from app.config.config import cfg, templates
+from app.config.config import templates
 from app.config.database import get_db
+from app.constants import VERSION
 from app.foos import morph_pydantic  # noqa: WPS347
 from app.models import Order
 from app.routes.order.controller import (
@@ -106,7 +107,7 @@ async def orders(request: Request, db: Session = Depends(get_db)) -> HTMLRespons
         "request": request,
         "orders": get_orders_dict(router, db),
         "title": "List of orders",
-        "version": cfg.version,
+        "version": VERSION,
         "orders_url": router.url_path_for("pending"),
         "orders_title": "Pending Orders",
     }
@@ -134,7 +135,7 @@ async def pending(request: Request, db: Session = Depends(get_db)) -> HTMLRespon
         "request": request,
         "orders": get_orders_dict(router, db, undelivered),
         "title": "List of pending orders",
-        "version": cfg.version,
+        "version": VERSION,
         "orders_url": router.url_path_for("orders"),
         "orders_title": "All Orders",
     }
