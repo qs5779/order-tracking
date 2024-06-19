@@ -77,14 +77,13 @@ async def items(  # noqa: WPS110
         The response in html
     """
     context = {
-        "request": request,
         "pieces": get_items_dict(order_id, db),
         "title": "List of items",
         "rcvd_url": router.url_path_for("delivered", order_id=order_id),
         "pending_url": router.url_path_for("pending"),
         "orders_url": router.url_path_for("orders"),
     }
-    return templates.TemplateResponse("items.html.j2", context)
+    return templates.TemplateResponse(request, "items.html.j2", context)
 
 
 @router.get("/")
@@ -104,14 +103,13 @@ async def orders(request: Request, db: Session = Depends(get_db)) -> HTMLRespons
         The response in html
     """
     context = {
-        "request": request,
         "orders": get_orders_dict(router, db),
         "title": "List of orders",
         "version": VERSION,
         "orders_url": router.url_path_for("pending"),
         "orders_title": "Pending Orders",
     }
-    return templates.TemplateResponse("orders.html.j2", context)
+    return templates.TemplateResponse(request, "orders.html.j2", context)
 
 
 @router.get("/pending")
@@ -132,14 +130,13 @@ async def pending(request: Request, db: Session = Depends(get_db)) -> HTMLRespon
     """
     undelivered = True
     context = {
-        "request": request,
         "orders": get_orders_dict(router, db, undelivered),
         "title": "List of pending orders",
         "version": VERSION,
         "orders_url": router.url_path_for("orders"),
         "orders_title": "All Orders",
     }
-    return templates.TemplateResponse("orders.html.j2", context)
+    return templates.TemplateResponse(request, "orders.html.j2", context)
 
 
 @router.post("/upsert")

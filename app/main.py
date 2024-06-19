@@ -1,13 +1,15 @@
 """Top level module for fastapi application."""
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from loguru import logger
+from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
 from starlette.responses import FileResponse
 
 from app.config.config import cfg, templates
-from app.config.database import engine
+from app.config.database import engine, get_db
 from app.constants import VERSION
 from app.models import create_all_tables
 from app.routes.forms.router import router as form_routes
@@ -31,14 +33,14 @@ app.include_router(form_routes)
 
 @app.get("/")
 def main_function(request: Request) -> HTMLResponse:
-    """Redirect to documentation (`/docs/`)."""
+    """Serve index page."""
     context = {
-        "request": request,
         "pending_url": order_routes.url_path_for("pending"),
         "orders_url": order_routes.url_path_for("orders"),
         "add_order_url": form_routes.url_path_for("order_get", order_id=0),
+        "health_url": app.url_path_for("health_check"),
     }
-    return templates.TemplateResponse("index.html.j2", context)
+    return templates.TemplateResponse(request, "index.html.j2", context)
 
 
 @app.get("/favicon.ico", include_in_schema=False)
@@ -48,9 +50,15 @@ async def favicon() -> FileResponse:
 
 
 @app.get("/health", response_class=HTMLResponse)
-async def health_check() -> str:
+async def health_check(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
     """Serve health check response."""
-    return "Healthy version: {0}".format(VERSION)
+    db.execute(text("SELECT 1"))
+    context = {
+        "version": VERSION,
+        "index_url": app.url_path_for("main_function"),
+    }
+    # return "Healthy version: {0}".format(VERSION)
+    return templates.TemplateResponse(request, "health.html.j2", context)
 
 
 if __name__ == "__main__":

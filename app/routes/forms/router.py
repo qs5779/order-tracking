@@ -53,9 +53,9 @@ def order_get(
     else:
         order = Order(id=0)
     return templates.TemplateResponse(
+        request,
         "order.html.j2",
         context={
-            "request": request,
             "order": order,
             "action_url": router.url_path_for("order_upsert"),
         },
@@ -189,9 +189,9 @@ def piece_edit(
     piece = db.query(Piece).filter(Piece.id == piece_id).first()
 
     return templates.TemplateResponse(
+        request,
         "piece.html.j2",
         context={
-            "request": request,
             "piece": piece,
             "action_url": router.url_path_for("piece_upsert"),
         },
@@ -223,9 +223,9 @@ def piece_add(
     piece = Piece(id=0, order_id=order_id)
 
     return templates.TemplateResponse(
+        request,
         "piece.html.j2",
         context={
-            "request": request,
             "piece": piece,
             "action_url": router.url_path_for("piece_upsert"),
         },
