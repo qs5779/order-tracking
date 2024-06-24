@@ -237,7 +237,7 @@ def piece_upsert(  # noqa: WPS211
     pid: Annotated[int, Form()],
     desc: Annotated[str, Form()],
     qty: Annotated[int, Form()],
-    order_id: Annotated[int, Form()],
+    oid: Annotated[int, Form()],
     db: Session = Depends(get_db),
 ) -> RedirectResponse:
     """Update or add a piece from form data.
@@ -250,7 +250,7 @@ def piece_upsert(  # noqa: WPS211
         The piece description
     qty : Annotated[int, Form()]
         The piece quantity
-    order_id : Annotated[int, Form()]
+    oid : Annotated[int, Form()]
         The order id
     db : Session
         The database session, by default Depends(get_db)
@@ -260,7 +260,7 @@ def piece_upsert(  # noqa: WPS211
     RedirectResponse
         The RedirectResponse object
     """
-    piece = PieceResponse(id=pid, desc=desc, qty=qty, order_id=order_id)
+    piece = PieceResponse(id=pid, desc=desc, qty=qty, order_id=oid)
 
     record = piece_add_or_update(piece, db)
     if pid:
