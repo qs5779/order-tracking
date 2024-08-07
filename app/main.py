@@ -46,7 +46,7 @@ def main_function(request: Request) -> HTMLResponse:
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon() -> FileResponse:
     """Serve favicon.ico file."""
-    return FileResponse("static/favicon.ico")
+    return FileResponse("static/order.ico")
 
 
 @app.get("/health", response_class=HTMLResponse)

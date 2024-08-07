@@ -15,12 +15,12 @@ vars:
 
 .PHONY: update
 update:
-	# poetry update --with test --with docs
-	# poetry export -f requirements.txt --without=test --without=docs -o requirements.txt --without-hashes
-	# poetry export -f requirements.txt --only=test --only=docs -o requirements_dev.txt --without-hashes
+#	 poetry update --with test --with docs
+#	 poetry export -f requirements.txt --without=test --without=docs -o requirements.txt --without-hashes
+#	 poetry export -f requirements.txt --only=test --only=docs -o requirements_dev.txt --without-hashes
 	poetry update --with test
 	poetry export -f requirements.txt --without=test -o requirements.txt --without-hashes
-	# poetry export -f requirements.txt --only=test -o requirements_dev.txt --without-hashes
+#	 poetry export -f requirements.txt --only=test -o requirements_dev.txt --without-hashes
 
 .PHONY: black
 black:
@@ -34,7 +34,7 @@ mypy: black
 .PHONY: lint
 lint: mypy
 	poetry run flake8 $(PACKAGE_DIR) $(TEST_MASK)
-	#poetry run doc8 -q docs
+#    poetry run doc8 -q docs
 
 .PHONY: package
 package:
