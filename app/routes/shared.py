@@ -1,5 +1,7 @@
 """Routes level module for fastapi application."""
 
+from datetime import datetime
+
 from sqlalchemy.orm import Session
 
 from app.constants import UNKNOWN
@@ -9,6 +11,19 @@ from app.routes.shipper.controller import get_shipper_id_by_name
 from app.routes.vendor.controller import get_vendor_id_by_name
 from app.schemas.order import OrderCreate
 from app.schemas.piece import PieceResponse
+
+
+def _ensure_ordered(record: Order) -> None:
+    """Ensure an order has an ordered date."""
+    if record.ordered is None:
+        if record.shipped is not None:
+            record.ordered = record.shipped
+        elif record.arrived is not None:
+            record.ordered = record.arrived
+        elif record.delivered is not None:
+            record.ordered = record.delivered
+        else:
+            record.ordered = datetime.now()
 
 
 def order_add_or_update(order: OrderCreate, db: Session) -> Order:  # noqa: C901, WPS231
