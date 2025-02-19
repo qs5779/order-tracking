@@ -66,6 +66,7 @@ def order_add_or_update(order: OrderCreate, db: Session) -> Order:  # noqa: C901
         else:
             setattr(record, key, vv)
 
+    _ensure_ordered(record)
     # persist the data to the database
     db.add(record)
     db.commit()
