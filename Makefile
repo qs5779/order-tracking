@@ -1,8 +1,10 @@
 SHELL:=/usr/bin/env bash
 
-PROJECT_NAME ?= $(shell basename $$(git rev-parse --show-toplevel) | sed -e "s/^python-//")
 PACKAGE_DIR = app
-PROJECT_VERSION ?= $(shell grep ^current_version .bumpversion.cfg | awk '{print $$NF'} | tr '-' '.')
+PROJECT_NAME = $(shell head -10 pyproject.toml|grep ^name | awk '{print $$NF}'|tr -d '"' | tr '-' '_')
+PROJECT_VERSION = $(shell head -10 pyproject.toml|grep ^version | awk '{print $$NF}'|tr -d '"')
+BUMP_VERSION = $(shell grep ^current_version .bumpversion.cfg | awk '{print $$NF'})
+CONST_VERSION = $(shell grep ^VERSION $(PACKAGE_DIR)/constants.py | awk '{print $$NF}'|tr -d '"')
 TEST_DIR = tests
 # TEST_MASK = $(TEST_DIR)/*.py $(TEST_DIR)/*/*.py
 TEST_MASK = $(TEST_DIR)/**/*.py
@@ -10,8 +12,20 @@ TEST_MASK = $(TEST_DIR)/**/*.py
 .PHONY: vars
 vars:
 	@echo "PROJECT_NAME: $(PROJECT_NAME)"
-	@echo "PACKAGE_DIR: $(PACKAGE_DIR)"
 	@echo "PROJECT_VERSION: $(PROJECT_VERSION)"
+	@echo "BUMP_VERSION: $(BUMP_VERSION)"
+	@echo "CONST_VERSION: $(CONST_VERSION)"
+	@echo "PACKAGE_DIR: $(PACKAGE_DIR)"
+
+.PHONY: version-sanity
+version-sanity:
+ifneq ($(PROJECT_VERSION), $(BUMP_VERSION))
+	$(error Version mismatch PROJECT_VERSION != BUMP_VERSION)
+endif
+ifneq ($(PROJECT_VERSION), $(CONST_VERSION))
+	$(error Version mismatch PROJECT_VERSION != CONST_VERSION)
+endif
+	@echo "Versions are equal $(PROJECT_VERSION), $(BUMP_VERSION), $(CONST_VERSION)"
 
 .PHONY: update
 update:
@@ -39,11 +53,15 @@ lint: mypy
 	poetry run flake8 $(PACKAGE_DIR) $(TEST_MASK)
 #    poetry run doc8 -q docs
 
+.PHONY: safety
+safety:
+	# poetry run safety check --full-report
+	poetry run safety scan --full-report
+
 .PHONY: package
 package:
 	poetry check
 	poetry run pip check
-	poetry run safety check --full-report
 
 .PHONY: sunit
 sunit:
@@ -62,7 +80,8 @@ deploy-cloud:
 
 .PHONY: deploy
 deploy:
-	manage-tag.sh -u v$(PROJECT_VERSION)
+# pass -f to force tagging dev versions which is best for dokku
+	manage-tag.sh -fu v$(PROJECT_VERSION)
 	git push dokku main:main
 
 .PHONY: clean clean-build clean-pyc clean-test

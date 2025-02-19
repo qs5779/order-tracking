@@ -8,18 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0-dev0] - 2025-02-19
+
+### Changed
+
+- feat_fill_ordered
+
+## [0.2.3-dev0] - 2024-08-07
+
 ### Changed
 
 - New favicon
 - Updated safety-policy
 
-## 0.2.2 - 2024-06-24
+## [0.2.2] - 2024-06-24
 
 ### Fixed
 
 - Item edit
 
-## 0.2.1 - 2024-06-19
+## [0.2.1] - 2024-06-19
 
 ### Changed
 
