@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "order-tracking"
-version = "0.3.0-dev0"
+version = "0.3.0-dev1"
 description = "Template for fastapi apps"
 authors = ["Quien Sabe <qs5779@mail.com>"]
 license = "MIT"

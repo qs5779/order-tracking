@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0-dev1] - 2025-02-19
+
+### Fixed
+
+- actually call the new _ensure_ordered function
+
 ## [0.3.0-dev0] - 2025-02-19
 
 ### Changed
