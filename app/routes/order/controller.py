@@ -138,6 +138,10 @@ def _pieces_url(router: APIRouter, oid: int, db: Session) -> str:
     """
     pieces_nbr = db.query(func.count(Piece.id)).filter(Piece.order_id == oid).scalar()
     if pieces_nbr > 0:
+        if pieces_nbr == 1:
+            pieces = get_pieces(oid, db)
+            if pieces[0].desc.startswith("https"):
+                return pieces[0].desc
         return _oid_url_for(router, oid, "items")
     return forms_router.url_path_for("piece_add", order_id=oid)
 

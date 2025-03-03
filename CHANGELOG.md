@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2-dev0] - 2025-03-03
+
+### Changed
+
+- runtime 3.10.15
+- allow pieces to be external url
+
 ## [0.3.1-dev0] - 2025-02-19
 
 ### Changed

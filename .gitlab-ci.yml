@@ -29,7 +29,7 @@ before_script:
 Run Makefile Tests:
   stage: test
   script:
-    make test
+    make gltest
 
 sast:
   stage: test
