@@ -33,11 +33,11 @@ update:
 #	 poetry export -f requirements.txt --without=test --without=docs -o requirements.txt --without-hashes
 #	 poetry export -f requirements.txt --only=test --only=docs -o requirements_dev.txt --without-hashes
 	poetry update --with test
-	poetry export -f requirements.txt --without=test -o requirements.txt --without-hashes
+#	poetry export -f requirements.txt --without=test -o requirements.txt --without-hashes
 #	 poetry export -f requirements.txt --only=test -o requirements_dev.txt --without-hashes
 	pre-commit autoupdate
 	git add --update
-	pre-commit run
+#	pre-commit run
 
 .PHONY: black
 black:
@@ -72,7 +72,10 @@ unit:
 	poetry run pytest $(TEST_DIR)
 
 .PHONY: test
-test: lint package unit
+test: safety gltest
+
+.PHONY: gltest
+gltest: lint package unit
 
 .PHONY: deploy-cloud
 deploy-cloud:

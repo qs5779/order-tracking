@@ -102,10 +102,12 @@
           {{ order.notes }}
         </td>
         <td>
-        {% if 'piece' in order.pieces  %}
+        {% if 'piece_add' in order.pieces  %}
           <a href='{{ order.pieces }}' title='Add'>Add</a>
-        {% else %}
+        {% elif 'metaorg.com' in order.pieces %}
           <a href='{{ order.pieces }}' title='Items'>Items</a>
+        {% else %}
+          <a href='{{ order.pieces }}' title='Items' target='_blank'>Items</a>
         {% endif %}
         </td>
       </tr>
