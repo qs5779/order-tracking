@@ -1,2 +1,3 @@
 ENV_STATE=development
 DATABASE_URL=sqlite:////orders/storage/test.db
+LOG_LEVEL=DEBUG
