@@ -13,7 +13,7 @@ def app() -> FastAPI:
 
 
 @pytest.fixture
-def client(app) -> Client:
+def client(app: FastAPI) -> Client:
     from fastapi.testclient import TestClient
 
     return TestClient(app)

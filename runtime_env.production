@@ -1,0 +1,2 @@
+ENV_STATE=prod
+DATABASE_URL=sqlite:////orders/storage/orders.db

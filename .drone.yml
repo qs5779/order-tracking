@@ -1,0 +1,26 @@
+kind: pipeline
+type: docker
+name: order-tracking
+
+steps:
+  - name: python 3.11
+    image: python:3.11
+    commands:
+    - pip install poetry
+    - poetry install --with test
+    - make citest
+
+  - name: notify
+    image: drillster/drone-email
+    settings:
+      host: smtp.metaorg.com
+      port: 25
+      from: metaorg@mail.com
+      recipients: [drone-aguada@mail.com]
+      recipients_only: true
+      attachment: build-result.xml
+      skip_verify: true
+
+trigger:
+  event:
+  - pull_request
