@@ -2,15 +2,11 @@ version: '3.0'
 
 scanning-settings:
   max-depth: 6
-  exclude:
-    - "node_modules"
-    - "lib/other/**"
-    - "**/*.js"
-  include-files:
-    - path: inside_target_dir/requirements-docs.txt
-      file-type: requirements.txt
-    - path: inside_target_dir/requirements-dev.txt
-      file-type: requirements.txt
+  exclude: []
+  include-files: []
+  system:
+    targets: []
+
 
 report:
   dependency-vulnerabilities:
@@ -20,21 +16,37 @@ report:
         environment-results: true
         unpinned-requirements: true
       cvss-severity: []
-      vulnerabilities:
-        70612:
-          reason: No known fix
-          expires: '2025-03-15'
+
 
 fail-scan-with-exit-code:
   dependency-vulnerabilities:
     enabled: true
     fail-on-any-of:
       cvss-severity:
-        - critical
-        - high
         - medium
+        - high
+        - critical
+      exploitability:
+        - medium
+        - high
+        - critical
 
 security-updates:
   dependency-vulnerabilities:
     auto-security-updates-limit:
       - patch
+
+installation:
+  default-action: allow
+  audit-logging:
+    enabled: true
+  allow:
+    packages: []
+    vulnerabilities: {}
+  deny:
+    packages: {}
+    vulnerabilities:
+      warning-on-any-of:
+        cvss-severity: []
+      block-on-any-of:
+        cvss-severity: []
