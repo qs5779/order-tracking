@@ -9,6 +9,7 @@ PACKAGE_DIR = app
 WHEEL_VERSION = $(shell echo $(PROJECT_VERSION)|sed -e 's/-dev/.dev/')
 BUMP_VERSION = $(shell grep ^current_version .bumpversion.cfg | awk '{print $$NF}')
 CONST_VERSION = $(shell grep ^VERSION $(PACKAGE_DIR)/constants.py | awk '{print $$NF}'|tr -d '"')
+ESCAPED_VERSION := $(subst .,\.,$(PROJECT_VERSION))
 HOST = $(shell hostname)
 ifneq ($(HOST), yam)
 DOCKER_ENV_FILE = docker_env.development
@@ -37,6 +38,7 @@ vars:
 	@echo "WHEEL_VERSION: $(WHEEL_VERSION)"
 	@echo "BUMP_VERSION: $(BUMP_VERSION)"
 	@echo "CONST_VERSION: $(CONST_VERSION)"
+	@echo "ESCAPED_VERSION: $(ESCAPED_VERSION)"
 	@echo "DOCKER_ENV_FILE: $(DOCKER_ENV_FILE)"
 	@echo "DOCKER_PROJECT: $(DOCKER_PROJECT)"
 
@@ -49,6 +51,18 @@ ifneq ($(PROJECT_VERSION), $(CONST_VERSION))
 	$(error Version mismatch PROJECT_VERSION != CONST_VERSION)
 endif
 	@echo "Versions are equal $(PROJECT_VERSION), $(BUMP_VERSION), $(CONST_VERSION)"
+
+.PHONY: changelog-check
+changelog-check: version-sanity
+ifneq (,$(findstring dev,$(PROJECT_VERSION)))
+	$(error Cannot pull request when dev version)
+else ifeq (,$(shell grep '\[$(ESCAPED_VERSION)\]' CHANGELOG.md))
+	$(error No changelog entry for $(PROJECT_VERSION))
+else ifneq (,$(shell grep Unreleased CHANGELOG.md))
+	$(error Unreleased section in CHANGELOG.md)
+else
+	@echo "Changelog entry found for $(PROJECT_VERSION)"
+endif
 
 .PHONY: run
 run:
@@ -100,17 +114,19 @@ nitpick:
 	nitpick -p . check
 
 .PHONY: test
-test: nitpick citest
+test: nitpick lint package unit
 
+# TODO: figure out how to unit test via drone
 .PHONY: citest
-citest: lint package unit
+citest: changelog-check lint package
 
 .PHONY: deploy-cloud
 deploy-cloud:
 	git push cloud main:main
 
 .PHONY: release
-release:
+release: changelog-check
+	@echo "Release $(PROJECT_VERSION) ready to be pushed"
 	manage-tag.sh -u v$(PROJECT_VERSION)
 
 .PHONY: clean clean-build clean-pyc clean-test
