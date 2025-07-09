@@ -114,15 +114,16 @@ nitpick:
 	nitpick -p . check
 
 .PHONY: test
-test: nitpick lint package unit
+test: testdb version-sanity nitpick lint package unit clean-test
 
 # TODO: figure out how to unit test via drone
 .PHONY: citest
-citest: changelog-check lint package
+citest: testdb changelog-check lint package unit clean-test
 
-.PHONY: deploy-cloud
-deploy-cloud:
-	git push cloud main:main
+.PHONY: testdb
+testdb:
+	mkdir -p ./storage
+	cp -f tests/data/test.db ./storage
 
 .PHONY: release
 release: changelog-check
@@ -152,6 +153,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache
+	rm -f storage/test.db
 
 .DEFAULT:
 	@cd docs && $(MAKE) $@
