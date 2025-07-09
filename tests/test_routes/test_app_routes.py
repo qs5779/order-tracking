@@ -30,7 +30,7 @@ def test_health_route(client: TestClient, version: str) -> None:
 
 def test_orders_route(client: TestClient, version: str) -> None:
     response = client.get("/orders/")
-    checks = "Version: {0}".format(version)
+    checks = ("Version: {0}".format(version), "Number of orders displayed: 49")
     assert response.status_code == 200
     for text in checks:
         assert text in response.text

@@ -7,7 +7,7 @@ steps:
     image: python:3.11
     environment:
       ENV_STATE: development
-      DATABASE_URL: 'sqlite:////orders/storage/test.db'
+      DATABASE_URL: 'sqlite:///storage/test.db'
       LOG_LEVEL: DEBUG
     commands:
     - pip install poetry
