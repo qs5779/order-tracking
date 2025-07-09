@@ -53,7 +53,5 @@ coverage.xml
 docs/_build/
 # PyBuilder
 target/
-# backups of test.db
-test.db.*
 terces/
 storage/

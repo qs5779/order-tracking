@@ -2,7 +2,7 @@
 name = "order-tracking"
 description = "Template for fastapi apps"
 license = "MIT"
-version = "0.4.0"
+version = "0.4.1"
 readme = "README.md"
 authors = [{name = "Quien Sabe", email = "qs5779@mail.com"}]
 requires-python = '>=3.11,<4.0'

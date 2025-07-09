@@ -5,6 +5,10 @@ name: order-tracking
 steps:
   - name: python 3.11
     image: python:3.11
+    environment:
+      ENV_STATE: development
+      DATABASE_URL: 'sqlite:////orders/storage/test.db'
+      LOG_LEVEL: DEBUG
     commands:
     - pip install poetry
     - poetry install --with test
