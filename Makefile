@@ -115,7 +115,6 @@ nitpick:
 .PHONY: test
 test: testdb version-sanity nitpick lint package unit clean-test
 
-# TODO: figure out how to unit test via drone
 .PHONY: citest
 citest: testdb changelog-check lint package unit clean-test
 
