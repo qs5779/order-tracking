@@ -3,8 +3,8 @@ type: docker
 name: order-tracking
 
 steps:
-  - name: python 3.11
-    image: python:3.11
+  - name: python 3.12
+    image: python:3.12
     environment:
       ENV_STATE: development
       DATABASE_URL: 'sqlite:///storage/test.db'
@@ -24,6 +24,10 @@ steps:
       recipients_only: true
       attachment: build-result.xml
       skip_verify: true
+    when:
+      status:
+        - success
+        - failure
 
 trigger:
   event:

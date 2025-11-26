@@ -24,10 +24,9 @@ TEST_MASK ?= tests/*.py
 .PHONY: poetry-update
 poetry-update:
 	poetry update --with test
-	pre-commit-update-repo.sh
 
 .PHONY: update
-update: poetry-update safety
+update: poetry-update safety package
 	pre-commit-update-repo.sh
 
 .PHONY: vars
@@ -53,7 +52,7 @@ endif
 	@echo "Versions are equal $(PROJECT_VERSION), $(BUMP_VERSION), $(CONST_VERSION)"
 
 .PHONY: changelog-check
-changelog-check: version-sanity
+changelog-check:
 ifneq (,$(findstring dev,$(PROJECT_VERSION)))
 	$(error Cannot pull request when dev version)
 else ifeq (,$(shell grep '\[$(ESCAPED_VERSION)\]' CHANGELOG.md))
@@ -107,11 +106,11 @@ package:
 
 .PHONY:  safety
 safety:
-	safety scan --full-report
+	safety --proxy-host squid.metaorg.com --proxy-port 3128 --proxy-protocol http scan --full-report
 
 .PHONY: nitpick
 nitpick:
-	nitpick -p . check
+	poetry run nitpick -p . check
 
 .PHONY: test
 test: testdb version-sanity nitpick lint package unit clean-test
