@@ -166,7 +166,12 @@ def get_orders(db: Session, pending: bool = False) -> list[Order]:
             db.query(Order)
             .join(Vendor, Order.vendor_id == Vendor.id)
             .join(Shipper, Order.shipper_id == Shipper.id)
-            .filter(or_(Order.delivered == None, func.trim(Order.delivered) == ""))
+            .filter(
+                or_(
+                    Order.delivered == None,  # noqa: E711
+                    func.trim(Order.delivered) == "",
+                )
+            )
             .order_by(Order.ordered.desc())
             .all()
         )

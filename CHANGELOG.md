@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-02-??
+
+### Changed
+
+- migrated Makefile to justfile
+- poetry update dependencies
+- ci with gitea act_runner
+
 ## [0.5.0] - 2025-11-26
 
 ### Changed

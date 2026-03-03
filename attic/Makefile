@@ -23,7 +23,7 @@ TEST_MASK ?= tests/*.py
 
 .PHONY: poetry-update
 poetry-update:
-	poetry update --with test
+	poetry update --with dev
 
 .PHONY: update
 update: poetry-update safety package

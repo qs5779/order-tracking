@@ -25,13 +25,13 @@ repos:
         args: ['--branch', 'main']
 
   - repo: https://github.com/pycqa/isort
-    rev: 7.0.0
+    rev: 8.0.1
     hooks:
       - id: isort
         name: isort (python)
 
   - repo: https://github.com/psf/black
-    rev: 25.11.0  # stable 0
+    rev: 26.1.0  # stable 0
     hooks:
       - id: black
         language_version: python3
@@ -41,10 +41,10 @@ repos:
     hooks:
       - id: flake8
         args: ['--max-line-length=88', '--show-source']
-        additional_dependencies: [wemake-python-styleguide >= 1.4.0]
+        additional_dependencies: [wemake-python-styleguide >= 1.6.1]
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.10.0
+    rev: v4.13.9
     hooks:
       - id: commitizen
         stages: [commit-msg]
