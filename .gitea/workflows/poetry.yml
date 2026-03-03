@@ -14,6 +14,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install just
+        run: |
+          apt update
+          apt install -y just
+
       - name: Install Poetry
         run: |
           python -m pip install --upgrade pip
