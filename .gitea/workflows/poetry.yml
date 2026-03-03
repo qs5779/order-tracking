@@ -9,15 +9,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - uses: extractions/setup-just@v3
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.12'
-
-      - name: Install just
-        run: |
-          apt update
-          apt install -y just
 
       - name: Install Poetry
         run: |
