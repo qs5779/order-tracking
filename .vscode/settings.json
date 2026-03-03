@@ -11,4 +11,5 @@
         "upserted"
     ],
     "linthtml.configFile": ".linthtmlrc.yaml",
+    "makefile.configureOnOpen": false,
 }

@@ -43,7 +43,7 @@ def order_add_or_update(order: OrderCreate, db: Session) -> Order:  # noqa: C901
     """
     record = (
         db.query(Order).filter(Order.number == order.number).first()
-    )  # noqa: WPS221
+    )  # noqa: WPS221, E501
 
     # if not, create it
     if record is None:
