@@ -1,8 +1,8 @@
 [project]
-name = "order-tracking"
+name = "orders"
 description = "Template for fastapi apps"
 license = "MIT"
-version = "0.6.0"
+version = "0.6.1-dev0"
 readme = "README.md"
 authors = [{name = "Quien Sabe", email = "qs5779@mail.com"}]
 requires-python = '>=3.12,<4.0'

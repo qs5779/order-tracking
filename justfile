@@ -89,25 +89,20 @@ poetry-update:
 update: poetry-update safety
 	@pre-commit-update-repo.sh
 
-build: version-sanity changelog-check
-	@poetry build
-
-publish: clean build
-  #!/usr/bin/env bash
-  set -euo pipefail
-  export UV_PUBLISH_USERNAME="${USER}"
-  export UV_PUBLISH_PASSWORD="$(wtfpass --db "$USER" show --plain pypi/metaorg)"
-  uv publish "--index" metaorg
+build: version-sanity changelog-check clean-build
+	podman build -t {{ PROJECT_NAME }}:{{PROJECT_VERSION}} -t {{ PROJECT_NAME }}:latest .
+	podman push --tls-verify=false {{ PROJECT_NAME }}:{{PROJECT_VERSION}} bee.metaorg.com:5000/{{ PROJECT_NAME }}:{{PROJECT_VERSION}}
+	podman push --tls-verify=false {{ PROJECT_NAME }}:latest bee.metaorg.com:5000/{{ PROJECT_NAME }}:latest
+	manage-tag.sh -u v{{PROJECT_VERSION}}
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
-clean-build: ## remove build artifacts
-	@rm -fr build/
-	@rm -fr docs/_build
-	@rm -fr dist/
-	@rm -fr .eggs/
-	@find . -name '*.egg-info' -exec rm -fr {} +
-	@find . -name '*.egg' -exec rm -f {} +
+clean-build:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if podman images | grep localhost/{{ PROJECT_NAME }}; then
+    podman images | grep localhost/{{ PROJECT_NAME }} | awk '{ print $3 }' | sort | uniq | xargs podman image rm -f
+  fi
 
 clean-pyc: ## remove Python file artifacts
 	@find . -name '*.pyc' -exec rm -f {} +
