@@ -13,7 +13,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: extractions/setup-just@v3
+      - uses: extractions/setup-just@v4
         with:
           github-token: ${{ secrets.MY_GITHUB_TOKEN }}
 
