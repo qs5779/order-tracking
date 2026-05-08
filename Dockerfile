@@ -10,7 +10,7 @@ ARG PYTHON_VERSION=3.12
 
 FROM python:${PYTHON_VERSION} AS builder
 
-ARG POETRY_VERSION=2.1.3
+ARG POETRY_VERSION=2.4.0
 
 #RUN apt-get update && apt-get install -y libpq-dev python3-dev
 

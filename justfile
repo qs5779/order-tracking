@@ -89,6 +89,8 @@ test: nitpick lint package unit
 
 citest: lint package unit
 
+candidate: test
+
 poetry-update:
 	@poetry update --with dev
 
@@ -97,8 +99,8 @@ update: poetry-update safety
 
 build: version-sanity changelog-check clean-build
 	podman build -t {{ PROJECT_NAME }}:{{PROJECT_VERSION}} -t {{ PROJECT_NAME }}:latest .
-	podman push --tls-verify=false {{ PROJECT_NAME }}:{{PROJECT_VERSION}} bee.metaorg.com:5000/{{ PROJECT_NAME }}:{{PROJECT_VERSION}}
-	podman push --tls-verify=false {{ PROJECT_NAME }}:latest bee.metaorg.com:5000/{{ PROJECT_NAME }}:latest
+	podman push --tls-verify=false {{ PROJECT_NAME }}:{{PROJECT_VERSION}} registry.metaorg.com:5000/{{ PROJECT_NAME }}:{{PROJECT_VERSION}}
+	podman push --tls-verify=false {{ PROJECT_NAME }}:latest registry.metaorg.com:5000/{{ PROJECT_NAME }}:latest
 	manage-tag.sh -u v{{PROJECT_VERSION}}
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
