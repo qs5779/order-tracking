@@ -1,8 +1,8 @@
 [project]
-name = "order-tracking"
+name = "orders"
 description = "Template for fastapi apps"
 license = "MIT"
-version = "0.6.0"
+version = "0.6.1"
 readme = "README.md"
 authors = [{name = "Quien Sabe", email = "qs5779@mail.com"}]
 requires-python = '>=3.12,<4.0'
@@ -30,18 +30,21 @@ isort = "^8.0"
 black = "^26.0"
 flake8-pytest-style = "^2.0"
 wemake-python-styleguide = "^1.0"
-mypy = "^1.17.0"
+mypy = "^1.0"
 types-python-dateutil = "^2.9.0.20240316"
 httpx = "^0.27.0"
 # pytest = ">=7.4,<9.0"
 # pytest-cov = "^6.0.0"
 pytest = "^9.0"
 pytest-cov = "^7.0"
-ruff = "^0.15.4"
+ruff = "^0.15"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.black]
+target-version = ["py311", "py312", "py313"]
+
 [tool.nitpick]
-style = "https://www.wtfo-guru.com/.well-known/nitpick-wtf-style.toml"
+style = "github://qs5779/devtools/nitpick/nitpick-wtf-style.toml"
